@@ -70,3 +70,25 @@ Use this IAM Policy JSON to allow sending emails.
   ]
 }
 ```
+
+# Install Travis CLI
+
+```
+sudo apt install -y ruby
+sudo apt-get install -y g++
+sudo gem install travis
+```
+
+# Setup Travis Releases
+## Create token under "Personal access tokens" https://github.com/settings/tokens
+## 
+travis login --pro
+travis encrypt GIT_HUB_TOKEN --pro
+
+## Put outputed encrypted token into .travis.yml
+```
+deploy:
+  provider: releases
+  api_key:
+    secure: ENCRYPTED_TOKEN
+```  
