@@ -6,25 +6,23 @@ env:
 
 script:
   - mvn package
-  - docker run -v `pwd`/target:/smtp oracle/graalvm-ce bash -c "cd /smtp && gu install
-    native-image && native-image -jar /smtp/*-with-dependencies.jar --no-fallback --static --initialize-at-build-time
-    aws-smtp-relay"
+  - docker run -v `pwd`/target:/smtp oracle/graalvm-ce bash -c "cd /smtp && gu install native-image && native-image -jar /smtp/*-with-dependencies.jar --no-fallback --static --initialize-at-build-time aws-smtp-relay"
   - mvn package -P debian
+
 deploy:
   - provider: releases
-      skip_cleanup: true
-      api_key:
-        secure: YtS/Fc5DoKUS+fJnjH1S6Ft9Zh0cE/jQbytNNBsKVaT2sZNa0cnm5rnlwGjHSQhR6IXYVnCjB8fi+67CfpeegaKZvJxe9ImDrSe129L7LMk0/PbIv2e7fYzOKbfdqTT+hdBGWCelDgd7JKi6pf0fOKHptKpaXzUO2oCG3pCnRK7MgxvydGjK5ozqQGOe+DZM/wHhA3tTCJ+MevxTWjKdml49EmfCxMtyX0hfLaRReEu/AVNe+nLj4fOKOl+FT52pI7IIexbDoSTN5fGGsw6RSeZoUfpqoxcc1Srs9BLDe1OZhIAfolQxb0pH3WnMitGSSAj3gXmrjGQv8WXYkukUOG3aZBbUxS9airO1Tqd+Qk+b/DOlLwdB7ns/UZ5GgAsv7Dct0uE12L8DixWjBIPVQDAygLvSdp89Kh2BmI4a1Dv3phY/h9ttiv8uzMRQxA159oMglSSeAb5L428Ol190gv08wDiudPirPSsVRYgWF28m1eViMVu8WMS8jijBuu8CqAbnG0wnQhal2pd0F2u2WjV6ISwSj6EG9nkQAkZAv5NQtfFY+WEbGv10TWpvokQ/cyuLrwpqf5THYW9I9fA+uReBt5q4UoVlwlQEAoeBLHSCtzfszlTtx4PeuwjeN7cM/77YPYAUbGFJG0qkNJeJ/1eItXGqnYNV4PYJZZq78os=
-      file_glob: true
-      file:
-        - target/aws-smtp-relay
-        - target/aws-smtp-relay*.jar
-        - target/aws-smtp-relay_*.deb
-      on:
-        repo: michaa76/aws-smtp-relay
-        tags: true
-
+    skip_cleanup: true
+    api_key:
+      secure: YtS/Fc5DoKUS+fJnjH1S6Ft9Zh0cE/jQbytNNBsKVaT2sZNa0cnm5rnlwGjHSQhR6IXYVnCjB8fi+67CfpeegaKZvJxe9ImDrSe129L7LMk0/PbIv2e7fYzOKbfdqTT+hdBGWCelDgd7JKi6pf0fOKHptKpaXzUO2oCG3pCnRK7MgxvydGjK5ozqQGOe+DZM/wHhA3tTCJ+MevxTWjKdml49EmfCxMtyX0hfLaRReEu/AVNe+nLj4fOKOl+FT52pI7IIexbDoSTN5fGGsw6RSeZoUfpqoxcc1Srs9BLDe1OZhIAfolQxb0pH3WnMitGSSAj3gXmrjGQv8WXYkukUOG3aZBbUxS9airO1Tqd+Qk+b/DOlLwdB7ns/UZ5GgAsv7Dct0uE12L8DixWjBIPVQDAygLvSdp89Kh2BmI4a1Dv3phY/h9ttiv8uzMRQxA159oMglSSeAb5L428Ol190gv08wDiudPirPSsVRYgWF28m1eViMVu8WMS8jijBuu8CqAbnG0wnQhal2pd0F2u2WjV6ISwSj6EG9nkQAkZAv5NQtfFY+WEbGv10TWpvokQ/cyuLrwpqf5THYW9I9fA+uReBt5q4UoVlwlQEAoeBLHSCtzfszlTtx4PeuwjeN7cM/77YPYAUbGFJG0qkNJeJ/1eItXGqnYNV4PYJZZq78os=
+    file_glob: true
+    file:
+      - target/aws-smtp-relay
+      - target/aws-smtp-relay*.jar
+      - target/aws-smtp-relay_*.deb
+    on:
+      repo: michaa76/aws-smtp-relay
+      tags: true
   - provider: script
-      script: bash docker_push
-      on:
-        tags: true
+    script: bash docker_push
+    on:
+      tags: true
