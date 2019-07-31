@@ -1,28 +1,32 @@
 language: java
 services:
-  - docker
+- docker
 env:
+  matrix:
   - IMAGE_NAME=michaa76/aws-smtp-relay
-
+  global:
+  - secure: teOHluTscfHZ1kpyM4WUd+bt7PXrJaqJCRaDJYHP3iHspjfR1ncvfsFgXQHfMsI+beW9ATgI3NoZoBJTFUMP83biDDunXTui5pQ7vjq49zHchHvoBhRFMmWt3VSwYHOKbysA32ufNhdea1zKz1cqlhVDZQohMvU38t89kT46S0op0oZBHPaU0BULIUtBqM+sIx/CZs00srMOfLCVVH11Y3uRHct+FwBDDxR3og/aiuV49tj/xvrjL0P4hcz9Bb12bhuaVVJRXEuIqR2U9zQWsEcNXGjJEqT4U/G81TNqqhcYbtJO+uly3hyI6skyQ44ODauFsGfdOBlrX2oTeWw3wfjozxs4gU5bz4xPyTKjzePGinRRvs0PLNXf8i3ol0pmwMB7f7HbzB/zargUAOyhdy7YzdztOmoVQL60UYURfSlceBjBghLpZVwUAJG/F6vS2dZUSLCN84392h1nebRJCLucQC9EnOcfFI+fjnmIERbHHI6+DksqkWpNzh0AkDCrriScbdxCbVrMaKMTe64f3O1pIqbvhDHLcipGMkEXELcGBhxD0D/nZt1PHT0NconX8oZLz3hqfCGUr3gQwzl4MpD25SiaNswJFlHh7y6jyWqjwcsEVRaS9uJQaZLBKROM5QtqtyG0Lw3JdlfkwHPR668IYfhJYbTLK4Bla0HykrM=
+  - secure: W3yiTRiSh8/A/crINWsJudaYpLlloOBsQf665WBji8GRxQQsD55IvU6jxKk4G6ESr1CyQPklFiL57XOuMr0SfEGHVJjyMoVnoTbsGRuy5G9KFULK50Xn3tzB8lkaiBymG3SJhq55vtQPVZ66pnnA8imKX3aWofY+abMLJZmGpksCb8eKwaAwtSIu8JAEBOy6lNQMP1ezcmRbY5ZaqgvDzFcw8l1fv105kQtVCQ9ZzX70uN0y9m+ryNDieChCicsdcAAJJkDtdleyaGrM/VICP9Uw3LHtnN3ST3FudjsEzjYUimNeTwM/lH2LtQXmST67QlWBciLXcKWO3z9dEUEFIy74P9+eYxuzA6J2q6j6DsW1mBQDKTCX4W+BZGjU7d5sYxuGPMnt+fdRMmjTn8xehPQPEmVV8836Dv2cmvXmN75lrlzZyLjDtq2HC7UpxlM1XsG+ljfnVqKjo+Ygv8Xra9bAmHboDDUKthQaDM50jSJd3RgoA0afyj8RWqRTxwFXYpbBb243kXK0IXL77OhU/sMUPYTFAesJYHrnwcF3fZJAz0hiH/+QVkZAOjJdUKoyIjIEbNK4bE8jkPzlvna1rNCdcJXeZiy5iaTUKFZz2VrHNzSa2ihKFDwa4w/hkGsFdGKJZcuda3UZkPhe15/434jBWHlYshQxMFAmdW24Tyo=
 script:
-  - mvn package
-  - docker run -v `pwd`/target:/smtp oracle/graalvm-ce bash -c "cd /smtp && gu install native-image && native-image -jar /smtp/*-with-dependencies.jar --no-fallback --static --initialize-at-build-time aws-smtp-relay"
-  - mvn package -P debian
-
+- mvn package
+- docker run -v `pwd`/target:/smtp oracle/graalvm-ce bash -c "cd /smtp && gu install
+  native-image && native-image -jar /smtp/*-with-dependencies.jar --no-fallback --static
+  --initialize-at-build-time aws-smtp-relay"
+- mvn package -P debian
 deploy:
-  - provider: releases
-    skip_cleanup: true
-    api_key:
-      secure: YtS/Fc5DoKUS+fJnjH1S6Ft9Zh0cE/jQbytNNBsKVaT2sZNa0cnm5rnlwGjHSQhR6IXYVnCjB8fi+67CfpeegaKZvJxe9ImDrSe129L7LMk0/PbIv2e7fYzOKbfdqTT+hdBGWCelDgd7JKi6pf0fOKHptKpaXzUO2oCG3pCnRK7MgxvydGjK5ozqQGOe+DZM/wHhA3tTCJ+MevxTWjKdml49EmfCxMtyX0hfLaRReEu/AVNe+nLj4fOKOl+FT52pI7IIexbDoSTN5fGGsw6RSeZoUfpqoxcc1Srs9BLDe1OZhIAfolQxb0pH3WnMitGSSAj3gXmrjGQv8WXYkukUOG3aZBbUxS9airO1Tqd+Qk+b/DOlLwdB7ns/UZ5GgAsv7Dct0uE12L8DixWjBIPVQDAygLvSdp89Kh2BmI4a1Dv3phY/h9ttiv8uzMRQxA159oMglSSeAb5L428Ol190gv08wDiudPirPSsVRYgWF28m1eViMVu8WMS8jijBuu8CqAbnG0wnQhal2pd0F2u2WjV6ISwSj6EG9nkQAkZAv5NQtfFY+WEbGv10TWpvokQ/cyuLrwpqf5THYW9I9fA+uReBt5q4UoVlwlQEAoeBLHSCtzfszlTtx4PeuwjeN7cM/77YPYAUbGFJG0qkNJeJ/1eItXGqnYNV4PYJZZq78os=
-    file_glob: true
-    file:
-      - target/aws-smtp-relay
-      - target/aws-smtp-relay*.jar
-      - target/aws-smtp-relay_*.deb
-    on:
-      repo: michaa76/aws-smtp-relay
-      tags: true
-  - provider: script
-    script: bash docker_push
-    on:
-      tags: true
+- provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: YtS/Fc5DoKUS+fJnjH1S6Ft9Zh0cE/jQbytNNBsKVaT2sZNa0cnm5rnlwGjHSQhR6IXYVnCjB8fi+67CfpeegaKZvJxe9ImDrSe129L7LMk0/PbIv2e7fYzOKbfdqTT+hdBGWCelDgd7JKi6pf0fOKHptKpaXzUO2oCG3pCnRK7MgxvydGjK5ozqQGOe+DZM/wHhA3tTCJ+MevxTWjKdml49EmfCxMtyX0hfLaRReEu/AVNe+nLj4fOKOl+FT52pI7IIexbDoSTN5fGGsw6RSeZoUfpqoxcc1Srs9BLDe1OZhIAfolQxb0pH3WnMitGSSAj3gXmrjGQv8WXYkukUOG3aZBbUxS9airO1Tqd+Qk+b/DOlLwdB7ns/UZ5GgAsv7Dct0uE12L8DixWjBIPVQDAygLvSdp89Kh2BmI4a1Dv3phY/h9ttiv8uzMRQxA159oMglSSeAb5L428Ol190gv08wDiudPirPSsVRYgWF28m1eViMVu8WMS8jijBuu8CqAbnG0wnQhal2pd0F2u2WjV6ISwSj6EG9nkQAkZAv5NQtfFY+WEbGv10TWpvokQ/cyuLrwpqf5THYW9I9fA+uReBt5q4UoVlwlQEAoeBLHSCtzfszlTtx4PeuwjeN7cM/77YPYAUbGFJG0qkNJeJ/1eItXGqnYNV4PYJZZq78os=
+  file_glob: true
+  file:
+  - target/aws-smtp-relay
+  - target/aws-smtp-relay*.jar
+  - target/aws-smtp-relay_*.deb
+  on:
+    repo: michaa76/aws-smtp-relay
+    tags: true
+- provider: script
+  script: bash docker_push
+  on:
+    tags: true
