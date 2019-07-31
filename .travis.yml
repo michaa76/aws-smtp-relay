@@ -9,7 +9,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: bfbd51b7e1414cdd6366f519ee75f50ea9fb23bc
+    secure: 6ac634e0f364ea9d6708044fe616116c48d4ddf7
   file_glob: true
   file:
     - target/aws-smtp-relay
